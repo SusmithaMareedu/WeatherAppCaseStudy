@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless Spring Boot 2 API - org.example::hello-spring-lambda
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+
+Resources:
+  DynamoDBLamdaAsgnFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: 		com.example.LamdaDynamoAsgn.StreamLambdaHandler::handleRequest
+      Runtime: java17
+      CodeUri: ./target/demo-0.0.1-SNAPSHOT.zip
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 30
+      Events:
+        GetUserApi:
+          Type: Api
+          Properties:
+            Path: /org/emp
+            Method: get
+        GetUserApiByID:
+          Type: Api
+          Properties:
+            Path: /org/emp/{id}
+            Method: get
+        CreateUserApi:
+          Type: Api
+          Properties:
+            Path: org/emp
+            Method: post
+        UpdateUserApi:
+          Type: Api
+          Properties:
+            Path: /org/emp/{id}
+            Method: put
+        DeleteUserApi:
+          Type: Api
+          Properties:
+            Path: /org/emp/{id}
+            Method: delete
+
+Outputs:
+  HelloSpringLambdaApi:
+    Description: URL for application
+    
+    Export:
+      Name: SpringDynamoDBLamdaApi
